@@ -55,7 +55,7 @@ def tfidf(documents):
         tfidf_documents.append(doc_tfidf)
     return tfidf_documents
 
-def relevant_terms(tokenized_documents):
+def relevant_terms(tokenized_documents, decile=4):
     # tokenized_documents = [tokenize(d) for d in documents]
     idf = inverse_document_frequencies(tokenized_documents)
     doc_relevants = []
@@ -67,11 +67,11 @@ def relevant_terms(tokenized_documents):
         # find deciles
         vals = np.array([x[1] for x in term_relevancies.items()])
         deciles = np.percentile(vals, np.arange(0, 100, 10))
-        # get 7th decile
-        decile7 = deciles[6]
-        # filter the terms with relevancy vlaues greater than 7th decile
+        # get nth decile
+        decile_n = deciles[decile]
+        # filter the terms with relevancy vlaues greater than nth decile
         doc_relevants.append(list(
-            filter( lambda x: x[1]>=decile7,
+            filter( lambda x: x[1]>=decile_n,
                 term_relevancies.items()
             )
         ))
